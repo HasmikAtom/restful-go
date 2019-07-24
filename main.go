@@ -62,12 +62,10 @@ func updateBook(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r) // Get params
 	for index, item := range books {
 		if item.ID == params["id"] {
-			books = append(books[:index], books[index+1:]...)
 			var book Book
 			_ = json.NewDecoder(r.Body).Decode(&book)
-			book.ID = strconv.Itoa(rand.Intn(10000000))
-			books = append(books, book)
-			return
+			books[index] = book
+			break
 		}
 	}
 	json.NewEncoder(w).Encode(books)
