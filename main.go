@@ -50,6 +50,7 @@ func getBook(w http.ResponseWriter, r *http.Request) {
 func createBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var book Book
+	//added error handling for json decoder
 	err := json.NewDecoder(r.Body).Decode(&book)
 	if err != nil {
 		http.Error(w, err.Error(), 400)
@@ -67,6 +68,7 @@ func updateBook(w http.ResponseWriter, r *http.Request) {
 	for index, item := range books {
 		if item.ID == params["id"] {
 			var book Book
+			//added error handling for json decoder
 			err := json.NewDecoder(r.Body).Decode(&book)
 			if err != nil {
 				http.Error(w, err.Error(), 400)
