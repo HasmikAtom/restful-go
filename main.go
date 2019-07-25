@@ -50,10 +50,14 @@ func getBook(w http.ResponseWriter, r *http.Request) {
 func createBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var book Book
-	_ = json.NewDecoder(r.Body).Decode(&book)
+	err := json.NewDecoder(r.Body).Decode(&book)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
 	book.ID = strconv.Itoa(rand.Intn(10000000))
 	books = append(books, book)
-	json.NewEncoder(w).Encode(book)
+	json.NewEncoder(w).Encode(books)
 }
 
 // Update book
@@ -63,7 +67,11 @@ func updateBook(w http.ResponseWriter, r *http.Request) {
 	for index, item := range books {
 		if item.ID == params["id"] {
 			var book Book
-			_ = json.NewDecoder(r.Body).Decode(&book)
+			err := json.NewDecoder(r.Body).Decode(&book)
+			if err != nil {
+				http.Error(w, err.Error(), 400)
+				return
+			}
 			books[index] = book
 			break
 		}
